@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Binaural Playground</title>
+    <meta name="description" content="Binaural 3D Audio">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script src="node_modules/aframe/dist/aframe.min.js"></script>
+    <script src="node_modules/aframe-physics-components/dist/aframe-physics-components.min.js"></script>
+  </head>
+  <body>
+    <a-scene physics-world="gravity: 0 0 0">
+      <a-assets>
+        <img id="box" src="img/box.png">
+        <a-mixin
+          id="ball"
+          physics-body="boundingBox: 1 1 1; mass: 1; velocity: 10 -8 -11; angularDamping: 0; linearDamping: 0;"
+          geometry="primitive: sphere; radius: 1.0; segments-height: 30; segments-width:30;"
+          material="color: green; metalness: 0.5; opacity: 1; side: double;">
+        </a-mixin>
+        <a-mixin
+          id="wall"
+          geometry="primitive: box; depth: 50; height: 2; width: 50;"
+          physics-body="mass: 0; boundingBox: 50 2 50; angularDamping: 0; linearDamping: 0;"
+          material="src: #box; repeat: 12 12;">
+        </a-entity>
+      </a-assets>
+
+      <a-entity
+          id="ball1"
+          mixin="ball"
+          position="0 0 -5"
+          >
+      </a-entity>
+      <a-sphere
+        position="0 0 -20"
+        side="double"
+        radius="1.26"
+        segments-height="30"
+        segments-width="30"
+        metalness="0.5"
+        color="#EF2D5E">
+      </a-sphere>
+
+<!--      <a-box
+        physics-body="boundingBox: 50 50 50; mass: 0; velocity: 0 0 0"
+        src="#box"
+        side="back"
+        repeat="12 12"
+        position="0 -50 0"
+        depth="50"
+        height="50"
+        width="50"
+        >
+</a-box>-->
+      <a-entity id="ground"
+        geometry="primitive: box; depth: 50; height: 2; width: 50;"
+        physics-body="mass: 0; boundingBox: 50 2 50; angularDamping: 0; linearDamping: 0;"
+        material="src: #box; repeat: 12 12;"
+        position="0 -26 0">
+      </a-entity>
+      <a-entity
+        geometry="primitive: box; depth: 50; height: 2; width: 50;"
+        physics-body="mass: 0; boundingBox: 50 2 50; angularDamping: 0; linearDamping: 0;"
+        material="src: #box; repeat: 12 12;"
+        position="0 26 0">
+      </a-entity>
+      <a-entity
+        geometry="primitive: box; depth: 2; height: 50; width: 50;"
+        physics-body="mass: 0; boundingBox: 50 50 2; angularDamping: 0; linearDamping: 0;"
+        material="src: #box; repeat: 12 12;"
+        position="0 0 26">
+      </a-entity>
+      <a-entity
+        geometry="primitive: box; depth: 2; height: 50; width: 50;"
+        physics-body="mass: 0; boundingBox: 50 50 2; angularDamping: 0; linearDamping: 0;"
+        material="src: #box; repeat: 12 12;"
+        position="0 0 -26">
+      </a-entity>
+      <a-entity
+        geometry="primitive: box; depth: 50; height: 50; width: 2;"
+        physics-body="mass: 0; boundingBox: 2 50 50; angularDamping: 0; linearDamping: 0;"
+        material="src: #box; repeat: 12 12;"
+        position="26 0 0">
+      </a-entity>
+      <a-entity
+        geometry="primitive: box; depth: 50; height: 50; width: 2;"
+        physics-body="mass: 0; boundingBox: 2 50 50; angularDamping: 0; linearDamping: 0;"
+        material="src: #box; repeat: 12 12;"
+        position="-26 0 0">
+      </a-entity>
+      <a-sky color="#161616"></a-sky>
+
+      <a-camera position="0 0 0" look-controls wasd-controls fly="true">
+        <a-cursor
+          fuse="false"
+          color="#2E3A87">
+      </a-camera>
+    </a-scene>
+  </body>
+
+  <script src="js/main.js"></script>
+</html>

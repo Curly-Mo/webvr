@@ -1,0 +1,24 @@
+{
+  "name": "webvr",
+  "version": "1.0.0",
+  "description": "Virtual Reality with 3D audio in the browser",
+  "main": "index.js",
+  "dependencies": {
+    "aframe": "^0.2.0",
+    "aframe-physics-components": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Curly-Mo/webvr.git"
+  },
+  "author": "Colin Fahy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Curly-Mo/webvr/issues"
+  },
+  "homepage": "https://github.com/Curly-Mo/webvr#readme"
+}
