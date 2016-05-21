@@ -14,12 +14,16 @@
   <body>
     <a-scene physics-world="gravity: 0 0 0">
       <a-assets>
-        <img id="box" src="img/box.png">
+        <audio id="spokey" src="audio/spokey_dokey.wav"></audio>
+        <img id="box" src="img/box.png" />
+        <img id="speaker" src="img/speaker.jpg" />
+        <img id="earth" src="img/earth.jpg" />
         <a-mixin
           id="ball"
-          physics-body="boundingBox: 1 1 1; mass: 1; velocity: 10 -8 -11; angularDamping: 0; linearDamping: 0;"
-          geometry="primitive: sphere; radius: 1.0; segments-height: 30; segments-width:30;"
-          material="color: green; metalness: 0.5; opacity: 1; side: double;">
+          physics-body="boundingBox: 2 2 2; mass: 1; velocity: 0 0 0; angularDamping: 0; linearDamping: 0;"
+          geometry="primitive: sphere; radius: 2.0; segments-height: 30; segments-width:30;"
+          material="src: #earth; metalness: 0.3; opacity: 1; side: double;"
+          >
         </a-mixin>
         <a-mixin
           id="wall"
@@ -28,23 +32,28 @@
           material="src: #box; repeat: 12 12;">
         </a-entity>
       </a-assets>
-
+<!--
       <a-entity
-          id="ball1"
+          id="default"
           mixin="ball"
           position="0 0 -5"
+          sound="src: audio/spokey_dokey.wav; autoplay: true; loop: true;"
           >
       </a-entity>
+-->
+<!--
       <a-sphere
+        id="test"
         position="0 0 -20"
         side="double"
         radius="1.26"
+        physics-body="boundingBox: 1 1 1; mass: 1; velocity: 0 0 0; angularDamping: 0; linearDamping: 0;"
         segments-height="30"
         segments-width="30"
         metalness="0.5"
         color="#EF2D5E">
       </a-sphere>
-
+-->
 <!--      <a-box
         physics-body="boundingBox: 50 50 50; mass: 0; velocity: 0 0 0"
         src="#box"
@@ -92,13 +101,17 @@
         material="src: #box; repeat: 12 12;"
         position="-26 0 0">
       </a-entity>
-      <a-sky color="#161616"></a-sky>
 
-      <a-camera position="0 0 0" look-controls wasd-controls fly="true">
-        <a-cursor
-          fuse="false"
-          color="#2E3A87">
-      </a-camera>
+      <a-sky color="#161616"></a-sky>
+        <a-camera id="camera"
+          position="0 0 0" 
+          look-controls
+          wasd-controls="fly: true; acceleration: 250;">
+          <a-cursor
+            fuse="false"
+            color="#2E3A87">
+          </a-cursor>
+        </a-camera>
     </a-scene>
   </body>
 
