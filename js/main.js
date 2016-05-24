@@ -60,9 +60,6 @@ function init(){
 
 var audio_context;
 function init_audio(){
-    balls['default'].addEventListener('loaded', function(){
-        audio_context = this.components.sound.sound.context;
-    });
 }
 
 function init_settings(){
@@ -70,16 +67,51 @@ function init_settings(){
     document.getElementById('submit').addEventListener('click', close_settings);
     document.getElementById('saymyname').addEventListener('click', function(){
         var stems = [
-            'audio/stems/say_my_name/SynthLead.wav',
-            'audio/stems/say_my_name/BgVoxWet.wav',
-            'audio/stems/say_my_name/Drums.wav',
-            'audio/stems/say_my_name/ArpBass.wav',
-            'audio/stems/say_my_name/PianoAndGuitar.wav',
-            'audio/stems/say_my_name/MainVoxDry.wav',
-            'audio/stems/say_my_name/BgVoxDry.wav',
-            'audio/stems/say_my_name/MainVoxWet.wav',
-            'audio/stems/say_my_name/Arp.wav',
-            'audio/stems/say_my_name/Bass.wav',
+            'audio/stems/say_my_name/SynthLead.m4a',
+            'audio/stems/say_my_name/BgVoxWet.m4a',
+            'audio/stems/say_my_name/Drums.m4a',
+            'audio/stems/say_my_name/ArpBass.m4a',
+            'audio/stems/say_my_name/PianoAndGuitar.m4a',
+            'audio/stems/say_my_name/MainVoxDry.m4a',
+            'audio/stems/say_my_name/BgVoxDry.m4a',
+            'audio/stems/say_my_name/MainVoxWet.m4a',
+            'audio/stems/say_my_name/Arp.m4a',
+            'audio/stems/say_my_name/Bass.m4a',
+        ];
+        load_stems(stems);
+    });
+    document.getElementById('tighten_up').addEventListener('click', function(){
+        var stems = [
+            'audio/stems/tighten_up/keys.ogg',
+            'audio/stems/tighten_up/drums.ogg',
+            'audio/stems/tighten_up/guitar.ogg',
+            'audio/stems/tighten_up/vocals.ogg',
+            'audio/stems/tighten_up/song.ogg',
+            'audio/stems/tighten_up/rhythm.ogg',
+        ];
+        load_stems(stems);
+    });
+    document.getElementById('breezeblocks').addEventListener('click', function(){
+        var stems = [
+            'audio/stems/breezeblocks/sampled_kick.mp3',
+            'audio/stems/breezeblocks/Joe_main_vocs_dry.mp3',
+            'audio/stems/breezeblocks/drum_kit.mp3',
+            'audio/stems/breezeblocks/Joe_guitar.mp3',
+            'audio/stems/breezeblocks/synth_top.mp3',
+            'audio/stems/breezeblocks/Gwill_end_gtr.mp3',
+        ];
+        load_stems(stems);
+    });
+    document.getElementById('reckoner').addEventListener('click', function(){
+        var stems = [
+            'audio/stems/reckoner/lead_vocal.m4a',
+            'audio/stems/reckoner/lead_and_backing_vocal.m4a',
+            'audio/stems/reckoner/drum2.m4a',
+            'audio/stems/reckoner/drum1.m4a',
+            'audio/stems/reckoner/piano_strings.m4a',
+            'audio/stems/reckoner/guitar.m4a',
+            'audio/stems/reckoner/backing_vocal.m4a',
+            'audio/stems/reckoner/bass.m4a',
         ];
         load_stems(stems);
     });
@@ -94,6 +126,8 @@ function play(){
         var ball = balls[key];
         //ball.components.sound.sound.isPlaying = false;
         ball.components.sound.sound.play();
+        ball.components.sound.sound.source.disconnect();
+        ball.components.sound.sound.source.connect(ball.components.sound.sound.splitter);
     }
 }
 function pause(){
@@ -120,7 +154,7 @@ function add_ball(id, src){
     ball.setAttribute('id', id);
     ball.setAttribute('position', {
         x: Math.sin(Math.PI/6 * Math.ceil(num_balls/2) * Math.pow(-1, num_balls))*8,
-        y:0,
+        y: Math.floor(num_balls/12) * 4,
         z:-Math.cos(Math.PI/6 * Math.ceil(num_balls/2) * Math.pow(-1, num_balls))*8,
     });
     if(id == 'default'){
@@ -132,6 +166,8 @@ function add_ball(id, src){
     ball.setAttribute('sound', 'loop', true);
     ball.setAttribute('sound', 'on', false);
     ball.addEventListener('loaded', function(){
+        audio_context = this.components.sound.sound.context;
+
         this.components.material.setMaterial(new_material(sources[id].color));
         this.components.sound.sound.panner.panningModel = 'HRTF';
         this.components.sound.sound.panner.panningModel.coneOuterAngle = 360;
@@ -140,6 +176,17 @@ function add_ball(id, src){
         physics.world = physics.el.sceneEl.components['physics-world'].world;
         physics.body.allowSleep = false;
         physics.world.add(physics.body);
+
+
+        // force mono
+        var splitter = audio_context.createChannelSplitter(2);
+        var merger = audio_context.createChannelMerger(1);
+        this.components.sound.sound.source.disconnect();
+        this.components.sound.sound.source.connect(splitter);
+        splitter.connect(merger, 0, 0);
+        splitter.connect(merger, 1, 0);
+        merger.connect(this.components.sound.sound.panner);
+        this.components.sound.sound.splitter = splitter;
     });
     ball.addEventListener('stateadded', function(e){
         if(e.detail.state === 'hovered'){
@@ -192,6 +239,7 @@ function distance(a, b){
 }
 
 function open_settings(){
+    pause();
     scene.style.display = 'none';
     var settings = document.getElementById('settings');
     settings.style.display = 'block';
@@ -265,19 +313,19 @@ function create_source(buffer, input, id) {
     }
     balls[id].components.sound.sound.source.disconnect();
     balls[id].components.sound.sound.source = source;
-    source.connect(balls[id].components.sound.sound.panner);
+    source.connect(balls[id].components.sound.sound.splitter);
 }
 
 var semaphore = 0;
 function handleFileSelect(e) {
     var submit = document.getElementById('submit');
-    submit.textContent = 'Loading...';
-    submit.disabled = true;
     var input = this;
     var id = this.name;
     var files = e.target.files; // FileList object
     for(var f=0;f<files.length;f++){
         semaphore += 1;
+        submit.textContent = 'Loading...';
+        submit.disabled = true;
         var file = files[f];
         if(f > 0){
             var input = add_input();
@@ -292,12 +340,13 @@ function handleFileSelect(e) {
                 var ball = add_ball(id);
                 audio_context.decodeAudioData(e.target.result, function(buffer){
                     create_source(buffer, input, id);
+                    semaphore -= 1;
+                    console.log(semaphore);
+                    if(semaphore <= 0){
+                        submit.textContent = 'Play!';
+                        submit.disabled = false;
+                    }
                 });
-                semaphore -= 1;
-                if(semaphore <= 0){
-                    submit.textContent = 'Play!';
-                    submit.disabled = false;
-                }
             };
         })(file, id);
         reader.readAsArrayBuffer(file);
@@ -340,16 +389,22 @@ function load_stems(files){
             semaphore -= 1;
             console.log(semaphore);
             if(semaphore <= 0){
-                submit.textContent = 'Play!';
-                submit.disabled = false;
+                setTimeout(function(){
+                    submit.textContent = 'Play!';
+                    submit.disabled = false;
+                }, 5000);
             }
         });
     }
 }
 
 function delete_ball(id){
-    balls[id].components['physics-body'].body.world.removeBody(balls[id].components['physics-body'].body)
+    try{
+        balls[id].components['physics-body'].body.world.removeBody(balls[id].components['physics-body'].body);
+        balls[id].components.sound.sound.gain.disconnect();
     balls[id].removeAttribute('sound');
+    }catch (e){
+    }
     balls[id].parentElement.removeChild(balls[id]);
     delete balls[id];
     sources[id].div.parentElement.removeChild(sources[id].div);
