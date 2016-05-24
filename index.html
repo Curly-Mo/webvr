@@ -8,22 +8,27 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+
+    <link href="css/main.css" rel="stylesheet">
+
     <script src="node_modules/aframe/dist/aframe.min.js"></script>
     <script src="node_modules/aframe-physics-components/dist/aframe-physics-components.min.js"></script>
   </head>
-  <body>
+  <body style="overflow: auto;">
     <a-scene physics-world="gravity: 0 0 0">
-      <a-assets>
-        <audio id="spokey" src="audio/spokey_dokey.wav"></audio>
+      <a-assets timeout="10000">
         <img id="box" src="img/box.png" />
+        <!--
         <img id="speaker" src="img/speaker.jpg" />
         <img id="earth" src="img/earth.jpg" />
+        -->
         <a-mixin
           id="ball"
           physics-body="boundingBox: 2 2 2; mass: 1; velocity: 0 0 0; angularDamping: 0; linearDamping: 0;"
-          geometry="primitive: sphere; radius: 2.0; segments-height: 30; segments-width:30;"
-          material="src: #earth; metalness: 0.3; opacity: 1; side: double;"
+          geometry="primitive: sphere; radius: 1.5; segments-height: 30; segments-width:30;"
           >
+          <!--material="src: #earth; metalness: 0.3; opacity: 1; side: double;"-->`
         </a-mixin>
         <a-mixin
           id="wall"
@@ -106,13 +111,40 @@
         <a-camera id="camera"
           position="0 0 0" 
           look-controls
-          wasd-controls="fly: true; acceleration: 250;">
+          wasd-controls="fly: true; acceleration: 200;">
           <a-cursor
             fuse="false"
             color="#2E3A87">
           </a-cursor>
         </a-camera>
+
+        <div class="settings-button-container">
+          <button id="settings-button" class="settings-button">Load Audio</button>
+        </div>
     </a-scene>
+
+    <div id="settings" style="display: none;">
+      <form>
+				<fieldset>
+          <legend>Settings</legend>
+            <div id="stems" style="text-align: center;">
+              <span>Load Song Stems</span>
+              <br/><br/>
+              <label for="saymyname">Say My Name - Odesza</label>
+              <button id="saymyname" type="button">Load</button>
+              <br/><br/>
+            </div>
+
+            <div id="file_inputs" style="text-align: center;">
+              <span>Select audio files</span>
+              <br/><br/>
+            </div>
+            <br/>
+            <br/>
+            <button id="submit" class="flat_button" type="button">Play!</button>
+        </fieldset>
+      </form>
+    </div>
   </body>
 
   <script src="js/main.js"></script>
