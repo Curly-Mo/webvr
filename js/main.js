@@ -399,12 +399,9 @@ function load_stems(files){
 }
 
 function delete_ball(id){
-    try{
-        balls[id].components['physics-body'].body.world.removeBody(balls[id].components['physics-body'].body);
-        balls[id].components.sound.sound.gain.disconnect();
+    balls[id].components['physics-body'].body.world.removeBody(balls[id].components['physics-body'].body);
+    balls[id].components.sound.sound.gain.disconnect();
     balls[id].removeAttribute('sound');
-    }catch (e){
-    }
     balls[id].parentElement.removeChild(balls[id]);
     delete balls[id];
     sources[id].div.parentElement.removeChild(sources[id].div);
