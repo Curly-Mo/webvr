@@ -154,9 +154,6 @@ function add_ball(id, src){
         return;
     }
     if(src === undefined){
-        src = '';
-    }
-    if(id == 'default'){
         src = 'audio/spokey_dokey.mp3';
     }
     var num_balls = Object.keys(balls).length;
