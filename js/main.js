@@ -11,10 +11,10 @@ function init(){
 
 
     AFRAME.registerComponent('grab', {
-	  init: function () {
+      init: function () {
           this.d = distance(camera.components.position.data, this.el.components.position.data);
-	  },
-	  tick: function () {
+      },
+      tick: function () {
           var phi = camera.components.rotation.data.x * Math.PI/180;
           var theta = -camera.components.rotation.data.y * Math.PI/180;
           var x = camera.components.position.data.x;
@@ -33,8 +33,18 @@ function init(){
           this.el.components['physics-body'].body.velocity.x = 0;
           this.el.components['physics-body'].body.velocity.y = 0;
           this.el.components['physics-body'].body.velocity.z = 0;
-	  }
-	});
+      }
+    });
+    document.addEventListener('mouseup', function(e){
+        e.stopPropagation();
+        for(var key in balls){
+            var ball = balls[key];
+            if(ball.components.grab != null){
+                remove_grab(ball);
+            }
+        }
+        return false;
+    });
 
 
     add_input('default');
@@ -67,16 +77,16 @@ function init_settings(){
     document.getElementById('submit').addEventListener('click', close_settings);
     document.getElementById('saymyname').addEventListener('click', function(){
         var stems = [
-            'audio/stems/say_my_name/SynthLead.m4a',
-            'audio/stems/say_my_name/BgVoxWet.m4a',
-            'audio/stems/say_my_name/Drums.m4a',
-            'audio/stems/say_my_name/ArpBass.m4a',
-            'audio/stems/say_my_name/PianoAndGuitar.m4a',
-            'audio/stems/say_my_name/MainVoxDry.m4a',
-            'audio/stems/say_my_name/BgVoxDry.m4a',
-            'audio/stems/say_my_name/MainVoxWet.m4a',
-            'audio/stems/say_my_name/Arp.m4a',
-            'audio/stems/say_my_name/Bass.m4a',
+            'https://dl.dropbox.com/s/10h8r8d01lfthcz/SynthLead.m4a',
+            'https://dl.dropbox.com/s/zi7iiiefaqz7xc2/BgVoxWet.m4a',
+            'https://dl.dropbox.com/s/4lko01f0jayt30p/Drums.m4a',
+            'https://dl.dropbox.com/s/m9g6ypj6bu9x13s/ArpBass.m4a',
+            'https://dl.dropbox.com/s/zh8mav69ax9lv4k/PianoAndGuitar.m4a',
+            'https://dl.dropbox.com/s/vslxm4ahyt3mm9k/MainVoxDry.m4a',
+            'https://dl.dropbox.com/s/ht31cvffjvy41ba/BgVoxDry.m4a',
+            'https://dl.dropbox.com/s/c5bta6kjkfv5mpu/MainVoxWet.m4a',
+            'https://dl.dropbox.com/s/2780icih6xs5c0x/Arp.m4a',
+            'https://dl.dropbox.com/s/2n6dqql9ji7vr96/Bass.m4a',
         ];
         load_stems(stems);
     });
@@ -205,13 +215,7 @@ function add_ball(id, src){
         this.components['physics-body'].body.velocity.z = 0;
     });
     ball.addEventListener('mouseup', function(e){
-        var scene = document.querySelector('a-scene');
-        this.removeAttribute('grab');
-        var curr = this.components['physics-body'].body.position;
-        var prev = this.components['physics-body'].body.previousPosition;
-        var factor = 2;
-        var force = {x: factor*(curr.x - prev.x), y: factor*(curr.y - prev.y), z: factor*(curr.z - prev.z)};
-        this.components['physics-body'].applyImpulse(force, {x: 0, y:0, z:0});
+        remove_grab(this);
     });
     balls[id] = ball;
     return ball;
@@ -274,14 +278,14 @@ function add_input(id){
     file_input.name = id;
     file_input.onchange = handleFileSelect;
     sources[id].fileinput = file_input;
-	sources[id].color = random_color();
-	sources[id].source_button = source_button;
-	sources[id].label= file_label;
-	sources[id].div = source_div;
+    sources[id].color = random_color();
+    sources[id].source_button = source_button;
+    sources[id].label= file_label;
+    sources[id].div = source_div;
 
-	source_button.classList.add('source_button');
-	source_button.style.backgroundColor = 'rgb(' + sources[id].color + ')';
-	source_button.style.borderColor= 'rgb(' + sources[id].color + ')';
+    source_button.classList.add('source_button');
+    source_button.style.backgroundColor = 'rgb(' + sources[id].color + ')';
+    source_button.style.borderColor= 'rgb(' + sources[id].color + ')';
     source_button.type= 'button';
     source_button.style.opacity = 0.3;
     //
@@ -299,7 +303,7 @@ function create_source(buffer, input, id) {
     }
     sources[id].buffer = buffer;
     source = audio_context.createBufferSource();
-	source.buffer = buffer;
+    source.buffer = buffer;
     source.loop = 'true';
     sources[id].audio_source = source;
     if(input.parentElement.nextElementSibling == null){
@@ -361,6 +365,7 @@ function random_color(){
 }
 
 function load_stems(files){
+    semaphore = 0;
     var submit = document.getElementById('submit');
     submit.textContent = 'Loading...';
     submit.disabled = true;
@@ -371,6 +376,33 @@ function load_stems(files){
 
     for(var i=0; i<files.length; i++){
         semaphore += 1;
+        var file = files[i];
+        var name = file.replace(/^.*\/(.*)$/, "$1");
+        var input = add_input(name);
+        input = input.querySelector('input');
+        input.nextElementSibling.textContent = name;
+        var request = new XMLHttpRequest();
+        request.open('GET', file, true);
+        request.id = name;
+        request.responseType = 'arraybuffer';
+        request.onload = function() {
+            var id = this.id;
+            var ball = add_ball(id);
+            var audioData = this.response;
+            audio_context.decodeAudioData(audioData, function(buffer) {
+                create_source(buffer, input, id);
+                semaphore -= 1;
+                console.log(semaphore);
+                if(semaphore <= 0){
+                    submit.textContent = 'Play!';
+                    submit.disabled = false;
+                }
+            },
+            function(e){"Error with decoding audio data" + e.err});
+        };
+        request.send();
+        /*
+        semaphore += 1;
         semaphore = Math.min(semaphore, 6);
         var file = files[i];
         var name = file.replace(/^.*\/(.*)$/, "$1");
@@ -379,31 +411,46 @@ function load_stems(files){
         var asset = document.createElement('audio');
         asset.src = file;
         asset.id = file;
+        asset.name = name;
         sources[name].asset = asset;
-        setTimeout(function(){
         scene.querySelector('a-assets').appendChild(asset);
-        }, 5000);
         var ball = add_ball(name, file);
         sources[name].label.textContent = name;
         asset.addEventListener('loadeddata', function(e){
             semaphore -= 1;
             console.log(semaphore);
+            console.log(e.srcElement.name);
+            sources[e.srcElement.name].source_button.style.opacity = 1;
             if(semaphore <= 0){
                 setTimeout(function(){
                     submit.textContent = 'Play!';
                     submit.disabled = false;
-                }, 5000);
+                }, 10000);
             }
-        });
+        });*/
     }
 }
 
 function delete_ball(id){
     balls[id].components['physics-body'].body.world.removeBody(balls[id].components['physics-body'].body);
     balls[id].components.sound.sound.gain.disconnect();
-    balls[id].removeAttribute('sound');
+    try{
+        balls[id].components.sound.sound.source.connect(balls[id].components.sound.sound.getOutput());
+        balls[id].removeAttribute('sound');
+    }catch (e){
+    }
     balls[id].parentElement.removeChild(balls[id]);
     delete balls[id];
     sources[id].div.parentElement.removeChild(sources[id].div);
     delete sources[id];
+}
+
+function remove_grab(ball){
+    var scene = document.querySelector('a-scene');
+    ball.removeAttribute('grab');
+    var curr = ball.components['physics-body'].body.position;
+    var prev = ball.components['physics-body'].body.previousPosition;
+    var factor = 2;
+    var force = {x: factor*(curr.x - prev.x), y: factor*(curr.y - prev.y), z: factor*(curr.z - prev.z)};
+    ball.components['physics-body'].applyImpulse(force, {x: 0, y:0, z:0});
 }
