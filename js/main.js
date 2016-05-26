@@ -77,51 +77,51 @@ function init_settings(){
     document.getElementById('submit').addEventListener('click', close_settings);
     document.getElementById('saymyname').addEventListener('click', function(){
         var stems = [
-            'https://dl.dropbox.com/s/10h8r8d01lfthcz/SynthLead.m4a',
-            'https://dl.dropbox.com/s/zi7iiiefaqz7xc2/BgVoxWet.m4a',
-            'https://dl.dropbox.com/s/4lko01f0jayt30p/Drums.m4a',
-            'https://dl.dropbox.com/s/m9g6ypj6bu9x13s/ArpBass.m4a',
-            'https://dl.dropbox.com/s/zh8mav69ax9lv4k/PianoAndGuitar.m4a',
-            'https://dl.dropbox.com/s/vslxm4ahyt3mm9k/MainVoxDry.m4a',
-            'https://dl.dropbox.com/s/ht31cvffjvy41ba/BgVoxDry.m4a',
-            'https://dl.dropbox.com/s/c5bta6kjkfv5mpu/MainVoxWet.m4a',
-            'https://dl.dropbox.com/s/2780icih6xs5c0x/Arp.m4a',
-            'https://dl.dropbox.com/s/2n6dqql9ji7vr96/Bass.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/SynthLead.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/BgVoxWet.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/Drums.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/ArpBass.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/PianoAndGuitar.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/MainVoxDry.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/BgVoxDry.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/MainVoxWet.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/Arp.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtldkliMF81X3ZKTkU/Bass.m4a',
         ];
         load_stems(stems);
     });
     document.getElementById('tighten_up').addEventListener('click', function(){
         var stems = [
-            'audio/stems/tighten_up/keys.ogg',
-            'audio/stems/tighten_up/drums.ogg',
-            'audio/stems/tighten_up/guitar.ogg',
-            'audio/stems/tighten_up/vocals.ogg',
-            'audio/stems/tighten_up/song.ogg',
-            'audio/stems/tighten_up/rhythm.ogg',
+            'https://googledrive.com/host/0BzXM3T_GSbtleTBjYjJjX0JraTA/keys.ogg',
+            'https://googledrive.com/host/0BzXM3T_GSbtleTBjYjJjX0JraTA/drums.ogg',
+            'https://googledrive.com/host/0BzXM3T_GSbtleTBjYjJjX0JraTA/guitar.ogg',
+            'https://googledrive.com/host/0BzXM3T_GSbtleTBjYjJjX0JraTA/vocals.ogg',
+            'https://googledrive.com/host/0BzXM3T_GSbtleTBjYjJjX0JraTA/song.ogg',
+            'https://googledrive.com/host/0BzXM3T_GSbtleTBjYjJjX0JraTA/rhythm.ogg',
         ];
         load_stems(stems);
     });
     document.getElementById('breezeblocks').addEventListener('click', function(){
         var stems = [
-            'audio/stems/breezeblocks/sampled_kick.mp3',
-            'audio/stems/breezeblocks/Joe_main_vocs_dry.mp3',
-            'audio/stems/breezeblocks/drum_kit.mp3',
-            'audio/stems/breezeblocks/Joe_guitar.mp3',
-            'audio/stems/breezeblocks/synth_top.mp3',
-            'audio/stems/breezeblocks/Gwill_end_gtr.mp3',
+            'https://googledrive.com/host/0BzXM3T_GSbtlMzlETWhSanNvNGc/sampled_kick.mp3',
+            'https://googledrive.com/host/0BzXM3T_GSbtlMzlETWhSanNvNGc/Joe_main_vocs_dry.mp3',
+            'https://googledrive.com/host/0BzXM3T_GSbtlMzlETWhSanNvNGc/drum_kit.mp3',
+            'https://googledrive.com/host/0BzXM3T_GSbtlMzlETWhSanNvNGc/Joe_guitar.mp3',
+            'https://googledrive.com/host/0BzXM3T_GSbtlMzlETWhSanNvNGc/synth_top.mp3',
+            'https://googledrive.com/host/0BzXM3T_GSbtlMzlETWhSanNvNGc/Gwill_end_gtr.mp3',
         ];
         load_stems(stems);
     });
     document.getElementById('reckoner').addEventListener('click', function(){
         var stems = [
-            'audio/stems/reckoner/lead_vocal.m4a',
-            'audio/stems/reckoner/lead_and_backing_vocal.m4a',
-            'audio/stems/reckoner/drum2.m4a',
-            'audio/stems/reckoner/drum1.m4a',
-            'audio/stems/reckoner/piano_strings.m4a',
-            'audio/stems/reckoner/guitar.m4a',
-            'audio/stems/reckoner/backing_vocal.m4a',
-            'audio/stems/reckoner/bass.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtleUktUGxCclM0ZjQ/lead_vocal.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtleUktUGxCclM0ZjQ/lead_and_backing_vocal.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtleUktUGxCclM0ZjQ/drum2.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtleUktUGxCclM0ZjQ/drum1.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtleUktUGxCclM0ZjQ/piano_strings.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtleUktUGxCclM0ZjQ/guitar.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtleUktUGxCclM0ZjQ/backing_vocal.m4a',
+            'https://googledrive.com/host/0BzXM3T_GSbtleUktUGxCclM0ZjQ/bass.m4a',
         ];
         load_stems(stems);
     });
@@ -154,6 +154,9 @@ function add_ball(id, src){
         return;
     }
     if(src === undefined){
+        src = '';
+    }
+    if(id == 'default'){
         src = 'audio/spokey_dokey.mp3';
     }
     var num_balls = Object.keys(balls).length;
